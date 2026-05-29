@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>How to Create a Locked Folder in iPhone Photos App (iOS 17+)</title>
+<meta content="A complete guide to creating a locked folder on your iPhone. Learn how to hide pictures, use Face ID protection, and keep sensitive media completely private." name="description"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Outfit:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --color-bg-base: #EEF2FF;
+            --color-layer-1: rgba(255,255,255,0.75);
+            --color-layer-2: rgba(255,255,255,0.50);
+            --color-primary-accent: #4338CA;
+            --color-secondary-accent: #EC4899;
+            --color-blob-a: #C7D2FE;
+            --color-blob-b: #FDE68A;
+            --color-body-text: #1E1B4B;
+            --color-heading-text: #1E1B4B;
+            --color-content-bg: #EEF2FF;
+            --color-hero-bg: #EEF2FF;
+            --color-border: rgba(67,56,202,0.16);
+            --color-meta-text: rgba(30,27,75,0.68);
+            --font-heading: 'Outfit', 'Inter', system-ui, sans-serif;
+            --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --max-reading-width: 780px;
+            --max-wide-width: 1160px;
+            --section-padding-v: 86px;
+            --radius-card: 28px;
+            --shadow-card: 0 24px 70px rgba(67, 56, 202, 0.15), inset 0 1px 0 rgba(255,255,255,0.68);
+            --shadow-soft: 0 18px 48px rgba(30,27,75,0.12);
+            --transition-speed: 0.3s;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body);
+            background:
+                radial-gradient(circle at 8% 4%, rgba(199,210,254,0.72), transparent 30%),
+                radial-gradient(circle at 90% 10%, rgba(253,230,138,0.48), transparent 28%),
+                linear-gradient(180deg, #EEF2FF 0%, #F8FAFF 45%, #EEF2FF 100%);
+            color: var(--color-body-text);
+            line-height: 1.75;
+            font-size: 17px;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: geometricPrecision;
+        }
+
+        h1, h2, h3, h4, .site-name, .nav-link {
+            font-family: var(--font-heading);
+            color: var(--color-heading-text);
+            line-height: 1.06;
+            letter-spacing: -0.5px;
+        }
+        h1 { font-size: clamp(40px, 7vw, 62px); font-weight: 700; margin-bottom: 1.25rem; }
+        h2 { font-size: clamp(32px, 4.8vw, 48px); font-weight: 700; margin: 0 0 1.5rem; }
+        h3 { font-size: clamp(23px, 3vw, 30px); font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; }
+        h4 { font-size: 1.24rem; font-weight: 700; margin-bottom: 0.8rem; }
+        p { margin-bottom: 1.45rem; }
+        ul, ol { margin-bottom: 1.5rem; padding-left: 1.35rem; }
+        li { margin-bottom: 0.65rem; }
+        strong { color: #15124A; font-weight: 700; }
+        a { color: var(--color-primary-accent); text-decoration: none; transition: color var(--transition-speed), transform var(--transition-speed), opacity var(--transition-speed), background var(--transition-speed), border-color var(--transition-speed); }
+        a:hover { color: var(--color-secondary-accent); }
+
+        .container { max-width: var(--max-reading-width); margin: 0 auto; padding: 0 24px; }
+        .container-wide { max-width: var(--max-wide-width); margin: 0 auto; padding: 0 24px; }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(238,242,255,0.7);
+            border-bottom: 1px solid rgba(255,255,255,0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: box-shadow var(--transition-speed), background var(--transition-speed);
+        }
+        header.scrolled { box-shadow: 0 12px 34px rgba(30,27,75,0.10); background: rgba(238,242,255,0.88); }
+        .nav-inner { display: flex; justify-content: space-between; align-items: center; min-height: 74px; max-width: var(--max-wide-width); margin: 0 auto; padding: 0 24px; gap: 22px; }
+        .header-logo-container { display: flex; align-items: center; gap: 14px; min-width: 0; }
+        .header-logo { width: 46px; height: 46px; object-fit: contain; border-radius: 15px; box-shadow: 0 10px 24px rgba(67,56,202,0.18); flex-shrink: 0; }
+        .site-name, .footer-brand-title { font-size: 1.42rem; font-weight: 700; letter-spacing: -0.02em; word-spacing: 0.14em; white-space: nowrap; }
+        .nav-links { display: flex; align-items: center; gap: 10px; }
+        .nav-link { font-size: 0.98rem; font-weight: 700; color: rgba(30,27,75,0.72); padding: 9px 13px; border-radius: 999px; }
+        .nav-link:hover { color: var(--color-primary-accent); background: rgba(255,255,255,0.55); }
+        .cta-header { font-family: var(--font-heading); font-weight: 700; font-size: 0.96rem; color: #fff; background: var(--color-primary-accent); padding: 11px 18px; border-radius: 999px; box-shadow: 0 14px 28px rgba(67,56,202,0.22); }
+        .cta-header:hover { color: #fff; transform: translateY(-1px); box-shadow: 0 18px 36px rgba(67,56,202,0.28); }
+        .hamburger { display: none; background: rgba(255,255,255,0.65); border: 1px solid rgba(255,255,255,0.8); border-radius: 999px; font-size: 1.35rem; cursor: pointer; color: var(--color-heading-text); width: 44px; height: 44px; }
+
+        .content-img { width: 100%; height: auto; max-height: 540px; object-fit: contain; border-radius: 30px; margin: 2.2rem 0; box-shadow: var(--shadow-soft); display: block; background: rgba(255,255,255,0.45); border: 1px solid rgba(255,255,255,0.72); padding: 10px; }
+        .extra-image { max-height: 460px; }
+        .product-image { max-width: 360px; margin: 1.7rem auto; }
+        .footer-logo { width: 56px; height: 56px; object-fit: contain; margin-bottom: 18px; display: block; border-radius: 18px; box-shadow: 0 18px 36px rgba(67,56,202,0.28); }
+
+        .hero-section { position: relative; isolation: isolate; overflow: hidden; background: #EEF2FF; padding: 90px 0 74px; border-bottom: 1px solid rgba(255,255,255,0.7); }
+        .hero-container { max-width: var(--max-wide-width); }
+        .hero-grid { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(280px, 0.92fr); align-items: center; gap: 34px; position: relative; z-index: 2; }
+        .hero-glass-card { background: var(--color-layer-1); border: 1px solid rgba(255,255,255,0.78); border-radius: 38px; padding: clamp(28px, 5vw, 52px); box-shadow: var(--shadow-card); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); will-change: transform; transform: translate3d(var(--px, 0), var(--py, 0), 0); transition: transform 0.18s ease-out; }
+        .hero-media { background: rgba(255,255,255,0.50); border: 1px solid rgba(255,255,255,0.76); border-radius: 36px; padding: 18px; box-shadow: var(--shadow-card); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+        .hero-media .content-img { margin: 0; max-height: 520px; box-shadow: none; border-radius: 24px; background: rgba(255,255,255,0.45); }
+        .breadcrumb { display: inline-flex; font-size: 0.78rem; color: var(--color-primary-accent); margin-bottom: 1.2rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 800; background: rgba(255,255,255,0.58); border: 1px solid rgba(255,255,255,0.86); border-radius: 999px; padding: 8px 14px; backdrop-filter: blur(12px); }
+        .meta-bar { font-size: 0.88rem; color: var(--color-meta-text); margin: 1.4rem 0 2rem; display: flex; flex-wrap: wrap; gap: 12px; }
+        .quick-answer { background: rgba(255,255,255,0.58); border: 1px solid rgba(255,255,255,0.72); padding: 24px; border-radius: 26px; margin-bottom: 0; box-shadow: inset 0 1px 0 rgba(255,255,255,0.75); }
+        .quick-answer .label { font-family: var(--font-heading); font-size: 0.82rem; font-weight: 800; text-transform: uppercase; color: var(--color-secondary-accent); display: inline-flex; margin-bottom: 8px; letter-spacing: 0.12em; }
+        .quick-answer p:last-child { margin-bottom: 0; }
+        .hero-blob { position: absolute; z-index: 0; width: 38vw; height: 38vw; min-width: 290px; min-height: 290px; border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; filter: blur(2px); opacity: .30; animation: blobMorph 20s infinite linear alternate; }
+        .blob-one { background: var(--color-blob-a); left: -9vw; top: -10vw; }
+        .blob-two { background: var(--color-blob-b); right: -7vw; top: 12%; animation-delay: -6s; }
+        .blob-three { background: linear-gradient(135deg, var(--color-blob-a), var(--color-secondary-accent)); width: 30vw; height: 30vw; left: 42%; bottom: -16vw; animation-delay: -12s; }
+        @keyframes blobMorph {
+            0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: rotate(0deg) scale(1); }
+            33% { border-radius: 30% 70% 55% 45% / 45% 55% 35% 65%; transform: rotate(45deg) scale(1.04); }
+            66% { border-radius: 72% 28% 35% 65% / 30% 64% 36% 70%; transform: rotate(90deg) scale(.96); }
+            100% { border-radius: 42% 58% 70% 30% / 67% 33% 56% 44%; transform: rotate(135deg) scale(1.02); }
+        }
+
+        section { padding: var(--section-padding-v) 0; position: relative; }
+        .bg-alt { background: linear-gradient(135deg, rgba(199,210,254,0.32), rgba(255,255,255,0.45)); }
+        section:not(.hero-section):not(.premium-band) .container,
+        section:not(.hero-section):not(.premium-band) .container-wide { position: relative; z-index: 1; }
+        .section-label { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 14px; padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,0.62); border: 1px solid rgba(255,255,255,0.78); color: var(--color-primary-accent); font-family: var(--font-heading); font-size: 0.76rem; font-weight: 800; letter-spacing: 0.14em; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.74); }
+        .section-label:nth-of-type(even), .section-label-light { color: var(--color-secondary-accent); }
+        .section-label-light { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.18); color: #FDE68A; }
+
+        .toc-card, .widget-box, .pricing-panel, .premium-mockup, .feature-row, .faq-item, .comp-table, .quick-answer { background: var(--color-layer-1); border: 1px solid rgba(255,255,255,0.76); border-radius: var(--radius-card); box-shadow: var(--shadow-card); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: transform var(--transition-speed), box-shadow var(--transition-speed), backdrop-filter var(--transition-speed), background var(--transition-speed); }
+        .toc-card { padding: 34px; margin-bottom: 3rem; }
+        .toc-card h3 { margin-top: 0; }
+        .toc-card ul { list-style: none; padding: 0; margin: 0; }
+        .toc-card li { margin-bottom: 12px; font-family: var(--font-heading); font-size: 1.12rem; font-weight: 700; }
+        .toc-card a { color: var(--color-body-text); }
+        .toc-card a:hover { color: var(--color-secondary-accent); padding-left: 4px; }
+
+        .btn-primary, .btn-premium-fill, .btn-premium-outline { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; font-family: var(--font-heading); font-weight: 800; letter-spacing: -0.01em; cursor: pointer; }
+        .btn-primary { background: var(--color-primary-accent); color: #fff; border: 1px solid rgba(255,255,255,0.25); font-size: 1rem; padding: 13px 26px; box-shadow: 0 14px 28px rgba(67,56,202,0.22); }
+        .btn-primary:hover { background: var(--color-secondary-accent); color: #fff; transform: translateY(-1px); }
+        .difficulty-indicator { display: inline-flex; gap: 4px; align-items: center; margin-left: 12px; vertical-align: middle; }
+        .diff-bar { width: 8px; height: 16px; background: rgba(67,56,202,0.15); border-radius: 999px; }
+        .diff-bar.active { background: linear-gradient(180deg, var(--color-primary-accent), var(--color-secondary-accent)); }
+        .diff-label { font-size: 0.75rem; color: var(--color-meta-text); margin-left: 6px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+        .feature-row { display: flex; align-items: flex-start; gap: 20px; padding: 24px; margin-bottom: 16px; background: rgba(255,255,255,0.58); }
+        .feature-row:nth-of-type(odd) { background: rgba(255,255,255,0.72); }
+        .feature-row:hover { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); transform: translateY(-3px); box-shadow: 0 24px 64px rgba(67,56,202,0.18); }
+        .feature-icon { width: 42px; height: 42px; background: linear-gradient(135deg, var(--color-primary-accent), var(--color-secondary-accent)); border-radius: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: white; font-weight: 800; box-shadow: 0 12px 24px rgba(67,56,202,0.22); }
+        .feature-text strong { display: block; font-family: var(--font-heading); font-size: 1.23rem; margin-bottom: 4px; }
+        .feature-tag { margin-left: auto; background: rgba(255,255,255,0.76); border: 1px solid rgba(67,56,202,0.12); padding: 5px 12px; border-radius: 999px; font-size: 0.76rem; white-space: nowrap; color: var(--color-primary-accent); font-weight: 700; }
+
+        .premium-band { background: radial-gradient(circle at 16% 0%, rgba(236,72,153,0.26), transparent 30%), linear-gradient(135deg, #1E1B4B, #312E81 62%, #4338CA); color: white; padding: 88px 0; text-align: center; overflow: hidden; }
+        .premium-band h2 { color: white !important; margin-top: 0; }
+        .premium-band h3 { color: white !important; }
+        .premium-band p { color: rgba(255,255,255,0.76) !important; max-width: 680px; margin-left: auto; margin-right: auto; }
+        .premium-mockup { background: rgba(255,255,255,0.12); color: white; padding: 28px; max-width: 860px; margin: 0 auto 2rem; border: 1px solid rgba(255,255,255,0.22); border-radius: 34px; box-shadow: 0 32px 80px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.2); }
+        .premium-mockup .content-img { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.22); box-shadow: none; }
+        .mockup-chips { display: flex; justify-content: center; gap: 12px; margin-bottom: 26px; flex-wrap: wrap; }
+        .chip { background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.18); padding: 8px 15px; border-radius: 999px; font-size: 0.78rem; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.88); }
+        .premium-cta-group { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+        .btn-premium-fill { background: #fff !important; color: var(--color-primary-accent) !important; padding: 14px 30px; border: 1px solid rgba(255,255,255,0.45); box-shadow: 0 18px 36px rgba(0,0,0,0.18); }
+        .btn-premium-fill:hover { color: var(--color-secondary-accent) !important; transform: translateY(-1px); }
+        .btn-premium-outline { border: 1px solid rgba(255,255,255,0.35) !important; color: white !important; padding: 13px 30px; background: rgba(255,255,255,0.08); }
+        .btn-premium-outline:hover { background: rgba(255,255,255,0.18); transform: translateY(-1px); }
+
+        .pricing-tabs { display: flex; gap: 10px; margin: 2rem 0 24px; padding: 8px; background: rgba(255,255,255,0.46); border: 1px solid rgba(255,255,255,0.76); border-radius: 999px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.72); }
+        .tab-btn { flex: 1; background: transparent; border: none; padding: 13px 18px; font-family: var(--font-heading); font-size: 1rem; font-weight: 800; cursor: pointer; color: var(--color-meta-text); border-radius: 999px; transition: background var(--transition-speed), color var(--transition-speed); }
+        .tab-btn.active { color: #fff; background: var(--color-primary-accent); box-shadow: 0 12px 26px rgba(67,56,202,0.20); }
+        .pricing-panel { display: none; padding: 34px; }
+        .pricing-panel.active { display: block; }
+        #pro-panel.active { background: linear-gradient(135deg, var(--color-primary-accent), #312E81); color: white; }
+        #pro-panel.active strong, #pro-panel.active .price-hero, #pro-panel.active p, #pro-panel.active li { color: white !important; }
+        .price-hero { font-size: 3.2rem; font-family: var(--font-heading); color: var(--color-heading-text); font-weight: 800; margin-bottom: 16px; }
+
+        .comp-table-wrapper { overflow-x: auto; margin: 2rem 0; border-radius: 28px; box-shadow: var(--shadow-card); background: rgba(255,255,255,0.46); border: 1px solid rgba(255,255,255,0.74); padding: 10px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .comp-table { width: 100%; border-collapse: separate; border-spacing: 0 10px; min-width: 640px; background: transparent; box-shadow: none; border: 0; }
+        .comp-table th, .comp-table td { padding: 16px; text-align: left; border-bottom: none; background: rgba(255,255,255,0.62); }
+        .comp-table th { font-family: var(--font-heading); text-transform: uppercase; color: var(--color-primary-accent); font-size: 0.88rem; letter-spacing: 0.08em; }
+        .comp-table tr > *:first-child { border-radius: 18px 0 0 18px; }
+        .comp-table tr > *:last-child { border-radius: 0 18px 18px 0; }
+        .group-header td { background: rgba(67,56,202,0.12) !important; color: var(--color-primary-accent); font-weight: 800; font-family: var(--font-heading); text-transform: uppercase; }
+        .comp-table td:nth-child(2) { font-weight: 800; color: var(--color-primary-accent); }
+
+        .faq-layout { display: grid; grid-template-columns: 260px 1fr; gap: 42px; align-items: start; }
+        .faq-sidebar { position: sticky; top: 104px; background: rgba(255,255,255,0.48); border: 1px solid rgba(255,255,255,0.72); border-radius: 28px; padding: 18px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: var(--shadow-card); }
+        .faq-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .faq-sidebar a { display: block; padding: 11px 12px; font-family: var(--font-heading); font-size: 1rem; font-weight: 800; color: var(--color-meta-text); border-radius: 999px; }
+        .faq-sidebar a.active { color: #fff; background: var(--color-primary-accent); }
+        .faq-item { margin-bottom: 18px; padding: 24px; background: rgba(255,255,255,0.56); }
+        .faq-item h4 { cursor: pointer; transition: color var(--transition-speed), transform var(--transition-speed); }
+        .faq-item.expanded { background: linear-gradient(135deg, rgba(236,72,153,0.16), rgba(255,255,255,0.74)); border-color: rgba(236,72,153,0.24); }
+        .faq-item.expanded h4 { color: var(--color-primary-accent); transform: translateX(3px); }
+
+        .widget-box { padding: 32px; margin: 2rem 0; }
+        .widget-box h3 { margin-top: 0; }
+        .form-select { width: 100%; padding: 14px 16px; font-family: var(--font-body); border: 1px solid rgba(67,56,202,0.16); border-radius: 18px; margin-bottom: 16px; font-size: 1rem; background: rgba(255,255,255,0.74); color: var(--color-body-text); outline: none; }
+        .form-select:focus { border-color: var(--color-primary-accent); box-shadow: 0 0 0 4px rgba(67,56,202,0.12); }
+        .widget-result { padding: 18px; background: rgba(255,255,255,0.65); border-radius: 20px; font-weight: 500; display: none; }
+
+        footer { background: linear-gradient(135deg, #12103A, #1E1B4B); color: white; padding: 70px 0 34px; font-size: 0.95rem; }
+        footer a { color: rgba(255,255,255,0.74); }
+        footer a:hover { color: #FDE68A; }
+        .footer-grid { display: grid; grid-template-columns: 1.3fr repeat(2, minmax(180px, 1fr)); gap: 42px; margin-bottom: 50px; }
+        .footer-grid > div { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 28px; padding: 24px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .footer-disclosure { border-top: 1px solid rgba(255,255,255,0.12); padding-top: 26px; color: rgba(255,255,255,0.58); font-size: 0.82rem; }
+
+        .reveal-card { opacity: 0; transform: scale(0.96) translateY(14px); }
+        .reveal-card.is-visible { opacity: 1; transform: scale(1) translateY(0); transition: opacity 0.7s cubic-bezier(.2,.65,.25,1), transform 0.7s cubic-bezier(.2,.65,.25,1), backdrop-filter 0.3s ease, box-shadow 0.3s ease; }
+
+        @media (max-width: 900px) {
+            .hero-grid { grid-template-columns: 1fr; }
+            .hero-media { order: -1; }
+            .faq-layout { grid-template-columns: 1fr; }
+            .faq-sidebar { position: static; }
+            .footer-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            :root { --section-padding-v: 62px; --radius-card: 22px; }
+            body { font-size: 16px; }
+            .nav-inner { min-height: 66px; }
+            .nav-links { display: none; position: absolute; top: 66px; left: 14px; right: 14px; background: rgba(255,255,255,0.82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); flex-direction: column; align-items: stretch; padding: 16px; border: 1px solid rgba(255,255,255,0.82); border-radius: 24px; box-shadow: var(--shadow-card); }
+            .nav-links.show { display: flex; }
+            .hamburger { display: inline-flex; align-items: center; justify-content: center; }
+            .site-name, .footer-brand-title { font-size: 1.18rem; }
+            .header-logo { width: 42px; height: 42px; }
+            .hero-section { padding: 46px 0 58px; }
+            .hero-glass-card, .hero-media, .toc-card, .widget-box, .pricing-panel, .premium-mockup, .faq-item { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+            .hero-glass-card { transform: none !important; padding: 28px; border-radius: 30px; }
+            .hero-blob { animation-duration: 40s; opacity: .24; }
+            .feature-row { flex-direction: column; }
+            .feature-tag { margin-left: 0; }
+            .pricing-tabs { flex-direction: column; border-radius: 24px; }
+            .premium-band { padding: 62px 0; }
+            .premium-cta-group { flex-direction: column; }
+            .content-img { border-radius: 24px; padding: 8px; max-height: none; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+            .reveal-card { opacity: 1 !important; transform: none !important; }
+        }
+</style>
+</head>
+<body>
+<header id="site-header">
+<div class="nav-inner">
+<div class="header-logo-container">
+<img alt="Text-free security shield and locked vault brand graphic" class="header-logo" decoding="async" loading="eager" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20160%20160%22%20role%3D%22img%22%20aria-label%3D%22Security%20shield%20and%20locked%20vault%20graphic%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%2218%22%20y1%3D%2220%22%20x2%3D%22142%22%20y2%3D%22142%22%20gradientUnits%3D%22userSpaceOnUse%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%234338CA%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23EC4899%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22h%22%20x1%3D%2250%22%20y1%3D%2246%22%20x2%3D%22114%22%20y2%3D%22124%22%20gradientUnits%3D%22userSpaceOnUse%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23FFFFFF%22%20stop-opacity%3D%220.96%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23E0E7FF%22%20stop-opacity%3D%220.78%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%20%20%3Cfilter%20id%3D%22s%22%20x%3D%22-20%25%22%20y%3D%22-20%25%22%20width%3D%22140%25%22%20height%3D%22140%25%22%3E%0A%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%2212%22%20stdDeviation%3D%2210%22%20flood-color%3D%22%234338CA%22%20flood-opacity%3D%220.22%22/%3E%0A%20%20%20%20%3C/filter%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%22160%22%20height%3D%22160%22%20rx%3D%2244%22%20fill%3D%22%23EEF2FF%22/%3E%0A%20%20%3Cpath%20d%3D%22M80%2018%20132%2038v38c0%2034.5-21.4%2055.8-52%2066-30.6-10.2-52-31.5-52-66V38l52-20Z%22%20fill%3D%22url%28%23g%29%22%20filter%3D%22url%28%23s%29%22/%3E%0A%20%20%3Cpath%20d%3D%22M80%2031%20119%2046v31.2c0%2025.5-15.4%2042.4-39%2051.2-23.6-8.8-39-25.7-39-51.2V46l39-15Z%22%20fill%3D%22rgba%28255%2C255%2C255%2C.18%29%22%20stroke%3D%22rgba%28255%2C255%2C255%2C.72%29%22%20stroke-width%3D%222%22/%3E%0A%20%20%3Crect%20x%3D%2249%22%20y%3D%2272%22%20width%3D%2262%22%20height%3D%2243%22%20rx%3D%2214%22%20fill%3D%22url%28%23h%29%22/%3E%0A%20%20%3Cpath%20d%3D%22M63%2072V61c0-11.1%207.3-19%2017-19s17%207.9%2017%2019v11%22%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%229%22%20stroke-linecap%3D%22round%22/%3E%0A%20%20%3Ccircle%20cx%3D%2280%22%20cy%3D%2293%22%20r%3D%227%22%20fill%3D%22%234338CA%22/%3E%0A%20%20%3Cpath%20d%3D%22M80%2099v10%22%20stroke%3D%22%234338CA%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22/%3E%0A%20%20%3Ccircle%20cx%3D%22122%22%20cy%3D%2236%22%20r%3D%2210%22%20fill%3D%22%23FDE68A%22%20opacity%3D%22.95%22/%3E%0A%20%20%3Ccircle%20cx%3D%2238%22%20cy%3D%22124%22%20r%3D%2213%22%20fill%3D%22%23C7D2FE%22%20opacity%3D%22.9%22/%3E%0A%3C/svg%3E"/>
+<div class="site-name">iOS Vault Guide</div>
+</div>
+<button aria-label="Toggle menu" class="hamburger">☰</button>
+<nav class="nav-links">
+<a class="nav-link" href="#overview">Overview</a>
+<a class="nav-link" href="#methods">Methods</a>
+<a class="nav-link" href="#recommendation">Top Pick</a>
+<a class="nav-link" href="#faq">FAQ</a>
+<a class="cta-header" href="#recommendation">See Our Top Pick →</a>
+</nav>
+</div>
+</header>
+<section class="hero-section"><div class="hero-blob blob-three"></div><div class="hero-blob blob-two"></div><div class="hero-blob blob-one"></div>
+<div class="hero-container container">
+
+
+
+
+
+
+<div class="hero-grid"><div class="hero-glass-card"><div class="breadcrumb">Mobile Privacy / iPhone Security</div><h1>How to Create a Locked Folder in iPhone Photos App (iOS 17+)</h1><p>If you hand your unlocked iPhone to a friend to show them one picture, they are only a few swipes away from seeing your entire camera roll. Apple offers built-in tools to prevent this, and <a href="https://apps.apple.com/us/app/calculator-hide-photos-videos/id1165276801" rel="noopener noreferrer" target="_blank">independent security apps</a> provide even stronger vaults. Here is exactly how to restrict access to your private media.</p><div class="meta-bar">
+<span>By Editorial Team</span>
+<span>•</span>
+<span>Updated Recently</span>
+<span>•</span>
+<span>12 min read</span>
+</div><div class="quick-answer reveal-card">
+<span class="label">Quick Answer</span>
+<p>To create a locked folder using native iOS 16/17/18 features: Open the <strong>Photos app</strong>, select the images you want to hide, tap the three-dot menu (or share button), and choose <strong>Hide</strong>. To ensure this folder requires Face ID or Touch ID to open, go to your iPhone's main <strong>Settings &gt; Photos</strong>, and toggle on <strong>Use Face ID</strong>. Your hidden items are now locked in a dedicated album at the bottom of the Albums tab.</p>
+</div></div><div class="hero-media"><img alt="Various types of data security and encryption protecting mobile devices and digital files" class="content-img reveal-card" src="https://i.ibb.co/hFG13q8F/types-of-data-security.jpg"/></div></div></div>
+</section>
+<section id="overview">
+<div class="container">
+<div class="toc-card reveal-card">
+<h3>Table of Contents</h3>
+<ul>
+<li><a href="#methods">Method 1: The Native iOS Hidden Album</a></li>
+<li><a href="#files-method">Method 2: Locking Media in the Apple Files App</a></li>
+<li><a href="#recommendation">Our Recommendation: Dedicated Vault Apps</a></li>
+<li><a href="#features-deepdive">Understanding iOS Privacy Features</a></li>
+<li><a href="#pricing">Free vs. Pro Security Options</a></li>
+<li><a href="#troubleshooting">Troubleshooting &amp; Common Issues</a></li>
+<li><a href="#faq">Frequently Asked Questions</a></li>
+</ul>
+</div>
+<span aria-hidden="true" class="section-label">GUIDE</span><h2>What You Need to Know Before Starting</h2>
+<p>Securing pictures on an Apple device comes down to a fundamental choice: relying on the operating system's built-in barriers, or moving the files into an entirely separate, encrypted application. The native route is fast and deeply integrated, but it leaves your media subject to the same passcode that unlocks your phone. A <a href="https://www.londondaily.news/calculator-vault-review-2025-the-complete-guide-to-hiding-photos-videos-notes-and-files-on-iphone/" rel="noopener noreferrer" target="_blank">third-party vault</a> requires an extra step to save media, but establishes a completely independent security perimeter.</p>
+<p>Before proceeding, verify your operating system. Apple drastically changed how photo privacy works in recent years. If you are running iOS 15 or older, the "Hidden" album simply moves photos out of the main timeline—it does not actually lock them behind biometrics. True Face ID locking was introduced in iOS 16 and refined in iOS 17 and 18.</p><img alt="iPhone hidden album privacy interface showing locked private photos protected by Face ID" class="content-img extra-image reveal-card" decoding="async" loading="lazy" src="https://i.ibb.co/VWwRM3SS/iphone-hidden-album-private-photos.jpg"/>
+<div class="widget-box reveal-card" id="compatibility-checker">
+<h3>iOS Version Compatibility Checker</h3>
+<p>Select your current iOS version to see what native locking features are available to you.</p>
+<select class="form-select" id="ios-version">
+<option value="">-- Choose your iOS version --</option>
+<option value="18">iOS 18 (Latest)</option>
+<option value="17">iOS 17</option>
+<option value="16">iOS 16</option>
+<option value="15">iOS 15 or older</option>
+</select>
+<div class="widget-result" id="compat-result"></div>
+</div>
+</div>
+</section>
+<section class="bg-alt" id="methods">
+<div class="container">
+<span aria-hidden="true" class="section-label">METHODS</span><h2>How to Create a Locked Folder in iPhone Photos (iOS 17/18)</h2>
+<h3 class="method-heading">Method 1: The Built-in Hidden Album 
+                <span class="difficulty-indicator">
+<span class="diff-bar active"></span><span class="diff-bar"></span><span class="diff-bar"></span>
+<span class="diff-label">Easy</span>
+</span>
+</h3><img alt="iPhone lock screen security with biometric access protecting hidden media" class="content-img extra-image reveal-card" decoding="async" loading="lazy" src="https://i.ibb.co/xtZC7X09/lock-screen-security.jpg"/>
+<p>Apple's native solution is the "Hidden" album. By default, moving a picture here removes it from your library view. To make it a true <em>locked</em> folder, you must enforce biometric authentication in your settings.</p>
+<ol>
+<li>Open the <strong>Settings</strong> app on your iPhone.</li>
+<li>Scroll down and tap on <strong>Photos</strong>.</li>
+<li>Ensure the toggle for <strong>Use Face ID</strong> (or Touch ID on older models) is turned <strong>ON</strong>.</li>
+<li>Open the <strong>Photos app</strong> and select the images you wish to conceal.</li>
+<li>Tap the circle with three dots in the corner (or the share icon depending on your exact version) and select <strong>Hide</strong>.</li>
+<li>Confirm you want to hide the items.</li>
+</ol>
+<p><strong>To view them later:</strong> Tap the "Albums" tab, scroll to the very bottom under "Utilities," and tap "Hidden." Your phone will scan your face before displaying the contents.</p>
+<p><strong>Limitations:</strong> If your Face ID fails repeatedly, the phone falls back to your standard device passcode. Anyone who knows your lock screen PIN can access this folder. Furthermore, these photos remain part of your iCloud Photos backup.</p><img alt="iCloud security and advanced data protection concept for private photo backups" class="content-img extra-image reveal-card" decoding="async" loading="lazy" src="https://i.ibb.co/0RPhLmVV/icloud-security-apple-adp.jpg"/>
+<h3 class="method-heading" id="files-method" style="margin-top: 3rem;">Method 2: Lock a Folder in Files on iPhone 
+                <span class="difficulty-indicator">
+<span class="diff-bar active"></span><span class="diff-bar active"></span><span class="diff-bar"></span>
+<span class="diff-label">Moderate</span>
+</span>
+</h3>
+<p>Many users ask, <em>"Can I lock a folder in Files on iPhone?"</em> The answer is nuanced. You cannot lock a standard folder directly in the iOS Files app with a password. However, you can create a password-protected document (like a Note or a ZIP file) that acts as a secure container.</p>
+<img alt="Visualization of device locked files and folder protection on an iOS interface" class="content-img reveal-card" src="https://i.ibb.co/1tCFpZc5/Device-Locked-Files.jpg"/><img alt="Apple Notes lock security concept for protecting imported private photos and videos" class="content-img extra-image reveal-card" decoding="async" loading="lazy" src="https://i.ibb.co/S4vzVL5V/apple-notes-lock.jpg"/>
+<ol>
+<li>Open the <strong>Notes app</strong> and create a new note.</li>
+<li>Tap the camera icon and choose <strong>Choose Photo or Video</strong> to import your sensitive media into the note.</li>
+<li>Once imported, tap the three-dot menu at the top right and select <strong>Lock</strong>.</li>
+<li>Set a specific password for this note (or choose to use your device passcode/Face ID).</li>
+<li>Go back to the Photos app and <strong>delete the original pictures</strong> (and clear them from "Recently Deleted").</li>
+</ol>
+<p><strong>Limitations:</strong> Storing high-resolution videos in the Notes app can quickly degrade performance and consume excessive storage. This method is best for a handful of static images, not a large media library.</p>
+</div>
+</section>
+<section class="premium-band" id="recommendation">
+<div class="container-wide">
+<span aria-hidden="true" class="section-label">TOP PICK</span><h2>The Tool We Recommend for Most Users</h2>
+<p>While native iOS features are convenient, they share a critical vulnerability: they rely on your main phone passcode. If someone knows your PIN to borrow your phone, they have full access to your "Hidden" album. For genuine separation and robust security, we recommend a dedicated vault.</p>
+<div class="premium-mockup reveal-card">
+<div class="mockup-chips">
+<span class="chip">Independent PIN</span>
+<span class="chip">Intrusion Tracking</span>
+<span class="chip">Cloud Sync</span>
+</div>
+<img alt="Dashboard interface showcasing digital data vault analogy and independent PIN protection for secure media files" class="content-img reveal-card" src="https://i.ibb.co/Y4PCmGNW/Data-Vault-Analogy.jpg" style="margin-top: 0; box-shadow: none;"/><img alt="Folder Lock 10 product boxshot representing a dedicated encrypted vault app for private files" class="content-img extra-image product-image reveal-card" decoding="async" loading="lazy" src="https://i.ibb.co/xSFPPmSR/folder-lock-10-boxshot-new-4.png"/>
+<div style="text-align: center; margin-bottom: 2rem;">
+<h3 style="font-size: 2rem; margin-bottom: 0.5rem; color: white;">Folder Lock</h3>
+<p style="color: #a4b3ac; max-width: 500px; margin: 0 auto; font-family: var(--font-body);">A specialized iOS utility designed to isolate sensitive files completely outside the Apple Photos ecosystem.</p>
+</div>
+<div class="premium-cta-group">
+<a class="btn-premium-fill" href="https://www.newsoftwares.net/download/folderlock10-en/folder-lock-en.exe" rel="noopener noreferrer" target="_blank">Download Free →</a>
+<a class="btn-premium-outline" href="https://store.newsoftwares.net/?add=fl10" rel="noopener noreferrer" target="_blank">View Full Version →</a>
+</div>
+</div>
+<p style="font-size: 0.85rem; margin-top: 1rem;">Available on the App Store. Requires iOS 13 or later.</p><img alt="Mobile Folder Lock app interface for protecting private media outside the iPhone Photos app" class="content-img extra-image reveal-card" decoding="async" loading="lazy" src="https://i.ibb.co/j1v04CG/Folder-Lock-Mobile.jpg"/>
+</div>
+</section>
+<section id="features-deepdive">
+<div class="container">
+<span aria-hidden="true" class="section-label">FEATURES</span><h2>Why a Dedicated App Outperforms the Native Hidden Album</h2>
+<p>When you utilize an independent security application like <a href="https://www.newsoftwares.net/" rel="noopener noreferrer" target="_blank">Folder Lock</a>, you transition from basic visual hiding to structured data isolation. Here is a breakdown of capabilities that standard iOS settings cannot replicate.</p>
+<img alt="Illustration of wireless file syncing securely across cloud storage integrations representing data isolation" class="content-img reveal-card" src="https://i.ibb.co/xqgxb3Pj/syncing-files-securely-onedrive-dropbox-icloud-and-google-drive.jpg"/><img alt="Secure media vault interface for isolating private photos videos and documents" class="content-img extra-image reveal-card" decoding="async" loading="lazy" src="https://i.ibb.co/HL2p3K4V/Media-Vault.jpg"/>
+<div class="feature-row reveal-card">
+<div class="feature-icon">1</div>
+<div class="feature-text">
+<strong>Isolated Media Vault</strong>
+                    When you move pictures or videos into this application, they are entirely severed from your standard camera roll and iCloud Photo stream, meaning they will never accidentally appear in a widget or slideshow.
+                </div>
+<div class="feature-tag">Privacy</div>
+</div>
+<div class="feature-row reveal-card">
+<div class="feature-icon">2</div>
+<div class="feature-text">
+<strong>Secure Digital Wallets &amp; Notes</strong>
+                    Beyond media, the architecture allows you to safely hold sensitive textual data—such as credit card details, passwords, and private notes—within the same secure perimeter.
+                </div>
+<div class="feature-tag">Versatility</div>
+</div><img alt="Folder Lock security and privacy settings screen for configuring vault protection" class="content-img extra-image reveal-card" decoding="async" loading="lazy" src="https://i.ibb.co/QjzK8dZg/folder-lock-10-screenshot-settings-security-privacy.png"/>
+<div class="feature-row reveal-card">
+<div class="feature-icon">3</div>
+<div class="feature-text">
+<strong>Hack Attempt Monitoring</strong>
+                    If someone attempts to guess your vault PIN and fails, the system quietly logs the unauthorized access attempt, providing you with an audit trail of snooping activity.
+                </div>
+<div class="feature-tag">Active Security</div>
+</div>
+<div class="feature-row reveal-card">
+<div class="feature-icon">4</div>
+<div class="feature-text">
+<strong>Wireless File Movement</strong>
+                    Transferring private files via cable can leave temporary traces on desktop computers. The integrated Wi-Fi transfer feature allows you to push items directly between your mobile device and a browser over a local network.
+                </div>
+<div class="feature-tag">Convenience</div>
+</div>
+</div>
+</section>
+<section class="bg-alt" id="comparison">
+<div class="container-wide">
+<span aria-hidden="true" class="section-label">COMPARISON</span><h2>App Locking Methods Compared</h2>
+<p>Understanding the difference between biometric access, PIN codes, and pattern locks is crucial when evaluating how to secure your media.</p><img alt="Fingerprint authentication icon representing biometric app locking options" class="content-img extra-image reveal-card" decoding="async" loading="lazy" src="https://i.ibb.co/gZZd98Zt/fingerprint-login-logo.png"/>
+<img alt="User accessing secured data through biometric and PIN unlocking methods on a smartphone" class="content-img reveal-card" src="https://i.ibb.co/gLVNxgq4/Accessing-Data-Unlocking.jpg"/>
+<div class="comp-table-wrapper reveal-card">
+<table class="comp-table">
+<thead>
+<tr>
+<th>Method</th>
+<th>Security Level</th>
+<th>Vulnerability</th>
+<th>Best Used For</th>
+</tr>
+</thead>
+<tbody>
+<tr class="group-header">
+<td colspan="4">Native iOS Features</td>
+</tr>
+<tr>
+<td>Face ID / Touch ID</td>
+<td>High</td>
+<td>Fallback is the device PIN; forced physical unlock.</td>
+<td>Everyday convenience; locking the native Photos app.</td>
+</tr>
+<tr>
+<td>Screen Time Limits</td>
+<td>Low</td>
+<td>Easily bypassed if the Screen Time passcode is known.</td>
+<td>Parental controls, not serious privacy.</td>
+</tr>
+<tr class="group-header">
+<td colspan="4">Third-Party Vaults (e.g., Folder Lock)</td>
+</tr>
+<tr>
+<td>Independent PIN</td>
+<td>Very High</td>
+<td>User forgetting the code (recovery can be difficult).</td>
+<td>True separation from device access.</td>
+</tr>
+<tr>
+<td>Pattern Lock</td>
+<td>Moderate</td>
+<td>Smudge trails on the screen; shoulder surfing.</td>
+<td>Quick access to secondary files.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="pricing">
+<div class="container">
+<span aria-hidden="true" class="section-label">PRICING</span><h2>Security Tiers: What You Get</h2>
+<p>Unlike subscription services that charge monthly for privacy, independent tools often utilize a freemium model. Here is how the tiers generally break down for our recommended tool.</p><img alt="Secure photos and videos vault screen illustrating premium media protection features" class="content-img extra-image reveal-card" decoding="async" loading="lazy" src="https://i.ibb.co/TD92fxxD/folder-lock-android-secure-photos-videos.jpg"/>
+<div class="pricing-tabs">
+<button class="tab-btn active" onclick="switchTab('free')">Base Application (Free)</button>
+<button class="tab-btn" onclick="switchTab('pro')">Full Version Upgrade</button>
+</div>
+<div class="pricing-panel active reveal-card" id="free-panel">
+<div class="price-hero">$0</div>
+<p>The entry-level tier costs nothing to download and provides immediate isolation for your files.</p>
+<ul>
+<li>Includes one gigabyte of secure vault capacity.</li>
+<li>Synchronizes your hidden media across a pair of authorized devices.</li>
+<li>Unlimited sharing capabilities with trusted users.</li>
+<li>Full access to mobile application features including secret notes and wallets.</li>
+</ul>
+<a class="btn-primary" href="#" style="margin-top: 1rem;">Download Free →</a>
+</div>
+<div class="pricing-panel reveal-card" id="pro-panel">
+<div class="price-hero">$39.95 <span style="font-size: 1rem; color: var(--color-meta-text);">/ one-time</span></div>
+<p>A single payment unlocks the entire suite, removing all baseline restrictions and adding advanced data destruction tools.</p>
+<ul>
+<li>Removes the capacity cap, providing unlimited secure storage space.</li>
+<li>Expands your synchronization allowance to five separate endpoints.</li>
+<li>Activates robust folder-level locking capabilities.</li>
+<li>Enables permanent file shredding, overwriting deleted items so they cannot be forensically recovered.</li>
+<li>Allows creation of maximum portable secure lockers.</li>
+</ul>
+<a class="btn-primary" href="#" style="margin-top: 1rem;">View Full Version →</a>
+</div>
+</div>
+</section>
+<section class="bg-alt" id="troubleshooting">
+<div class="container">
+<span aria-hidden="true" class="section-label">RECOVERY</span><h2>Troubleshooting &amp; Owner Recovery</h2>
+<p>If you are struggling to manage your secure files or have lost access, consult these verified owner-recovery steps.</p>
+<img alt="Concept showing the intersection of digital encryption and physical device security for data recovery" class="content-img reveal-card" src="https://i.ibb.co/chqG7MnN/digital-and-physical-security.jpg"/><img alt="Sensitive personal data protection concept for owner recovery and private file access" class="content-img extra-image reveal-card" decoding="async" loading="lazy" src="https://i.ibb.co/Zpt5NfpT/sensitive-personal-data.jpg"/>
+<h3>How to recover photos from a locked app</h3>
+<p>If you have forgotten your dedicated PIN for a third-party vault, the recovery process depends strictly on whether you established backup credentials during setup. Security tools are designed to resist bypass attempts. You must check your email for a license key or recovery code, or use the "Lost Registration" portal provided by the developer. Uninstalling the app <strong>will not</strong> bypass the lock and will likely result in the deletion of your hidden files.</p>
+<h3>App lock behavior after phone restart</h3>
+<p>A frequent query is how security holds up during system reboots. Native iOS Face ID requires your numeric passcode immediately following a restart before biometric scanning resumes. Similarly, high-quality independent vaults remain sealed upon reboot and will demand their master password before launching into memory. They do not fail open.</p>
+<h3>Can I access a locked folder from another device?</h3>
+<p>If you are utilizing the native Apple Hidden album, you can view it on an iPad or Mac logged into the exact same Apple ID, provided iCloud Photos is syncing. If you use a third-party vault, you can only access the files if the app features <a href="https://www.windowscentral.com/how-encrypt-data-storing-it-cloud-and-why-you-should" rel="noopener noreferrer" target="_blank">cloud synchronization</a> (like the up-to 5 device sync in premium tiers) and you log into the service on the secondary hardware.</p>
+</div>
+</section>
+<section id="faq">
+<div class="container-wide faq-layout">
+<div class="faq-sidebar">
+<ul>
+<li><a class="faq-link active" href="#q1">Creation &amp; Access</a></li>
+<li><a class="faq-link" href="#q2">App Locks &amp; Security</a></li>
+<li><a class="faq-link" href="#q3">Advanced Queries</a></li>
+</ul>
+</div>
+<div class="faq-content">
+<div class="faq-section" id="q1">
+<div class="faq-item reveal-card">
+<h4>Can you create locked photo albums on iPhone?</h4>
+<p>Yes. Beginning fully in iOS 16, Apple transformed the standard "Hidden" album into a biometric-locked space. You cannot create multiple distinct locked albums natively; all hidden media goes into a single repository requiring Face ID or Touch ID to view.</p>
+</div>
+<div class="faq-item reveal-card">
+<h4>Can I create a folder for pictures and lock it on iPhone apart from the hidden folder?</h4>
+<p>Not natively within the Photos app. If you require multiple categorized secure folders (e.g., "Financial Receipts" and "Personal Media"), you must download a <a href="https://appadvice.com/app/secure-gallery-password-vault-hide-photo-video/959450745" rel="noopener noreferrer" target="_blank">third-party security application</a> that supports custom folder architecture.</p>
+</div>
+<div class="faq-item reveal-card">
+<h4>What happens if I delete the locked folder on iPhone?</h4>
+<p>You cannot delete the native "Hidden" folder itself, but you can turn off its visibility in Settings. If you delete photos from within the hidden folder, they move to the "Recently Deleted" folder, which is also protected by Face ID on modern iOS versions, before being permanently erased after 30 days.</p>
+</div>
+</div>
+<div class="faq-section" id="q2" style="display: none;">
+<div class="faq-item reveal-card">
+<h4>Can someone bypass app lock by restarting the phone?</h4>
+<p>No. Both native Apple security (Face ID) and properly engineered third-party applications remain fully engaged through a hard reset. In fact, restarting forces the requirement of a manual passcode entry, disabling biometric convenience temporarily for enhanced security.</p>
+</div>
+<div class="faq-item reveal-card">
+<h4>Can I lock a notes folder on iPhone?</h4>
+<p>Yes. The Apple Notes app allows you to lock individual notes, but not an entire folder at once. You must swipe left on a specific note and tap the lock icon to secure its contents behind a password.</p>
+</div>
+</div>
+<div class="faq-section" id="q3" style="display: none;">
+<div class="faq-item reveal-card">
+<h4>How does fingerprint app locking work on older devices?</h4>
+<p>On iPhones equipped with Home buttons (like the SE), Touch ID functions identically to Face ID for the purpose of securing the hidden album. The hardware securely enclave processes the fingerprint data and passes an approval token to the software without exposing the biometric data itself.</p>
+</div>
+<div class="faq-item reveal-card">
+<h4>Is the iPhone locked photo folder encrypted?</h4>
+<p>When your iPhone is locked, the entire file system is heavily encrypted. However, when the device is unlocked and you are just opening the Hidden album, the lock acts more as an access control barrier rather than a separate layer of <a href="https://psbios.com/file-encryption-explained/" rel="noopener noreferrer" target="_blank">file-level encryption</a>. For distinct file encryption, dedicated software is necessary.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="premium-band" style="background-color: var(--color-heading-text);">
+<div class="container" style="text-align: center;">
+<span aria-hidden="true" class="section-label section-label-light">SUMMARY</span><h2 style="color: white; margin-bottom: 1rem;">The Bottom Line</h2>
+<p style="color: #a4b3ac; max-width: 700px; margin: 0 auto 2rem;">If you simply want to keep a photo off your main timeline when showing a friend a meme, Apple's native Face ID hidden album is sufficient. However, if you are storing financial records, highly personal media, or need a security layer that doesn't rely on your phone's main lock screen PIN, migrating to an isolated vault is the correct protocol.</p><img alt="Smartphone shield security concept summarizing iPhone private media protection" class="content-img extra-image reveal-card" decoding="async" loading="lazy" src="https://i.ibb.co/h1C8dtH1/Smartphone-Shield.jpg"/>
+<div class="premium-cta-group" style="justify-content: center;">
+<a class="btn-premium-fill" href="https://www.newsoftwares.net/download/folderlock10-en/folder-lock-en.exe" rel="noopener noreferrer" style="background: var(--color-primary-accent); color: white; border: 2px solid var(--color-primary-accent);" target="_blank">Try Our Recommendation Free →</a>
+<a class="btn-premium-outline" href="https://store.newsoftwares.net/?add=fl10" rel="noopener noreferrer" style="border-color: #a4b3ac;" target="_blank">View Pricing Plans →</a>
+</div>
+</div>
+</section>
+<footer>
+<div class="container-wide">
+<div class="footer-grid">
+<div>
+<img alt="Text-free security shield and locked vault brand graphic" class="footer-logo" decoding="async" loading="lazy" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20160%20160%22%20role%3D%22img%22%20aria-label%3D%22Security%20shield%20and%20locked%20vault%20graphic%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%2218%22%20y1%3D%2220%22%20x2%3D%22142%22%20y2%3D%22142%22%20gradientUnits%3D%22userSpaceOnUse%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%234338CA%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23EC4899%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22h%22%20x1%3D%2250%22%20y1%3D%2246%22%20x2%3D%22114%22%20y2%3D%22124%22%20gradientUnits%3D%22userSpaceOnUse%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23FFFFFF%22%20stop-opacity%3D%220.96%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23E0E7FF%22%20stop-opacity%3D%220.78%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%20%20%3Cfilter%20id%3D%22s%22%20x%3D%22-20%25%22%20y%3D%22-20%25%22%20width%3D%22140%25%22%20height%3D%22140%25%22%3E%0A%20%20%20%20%20%20%3CfeDropShadow%20dx%3D%220%22%20dy%3D%2212%22%20stdDeviation%3D%2210%22%20flood-color%3D%22%234338CA%22%20flood-opacity%3D%220.22%22/%3E%0A%20%20%20%20%3C/filter%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%22160%22%20height%3D%22160%22%20rx%3D%2244%22%20fill%3D%22%23EEF2FF%22/%3E%0A%20%20%3Cpath%20d%3D%22M80%2018%20132%2038v38c0%2034.5-21.4%2055.8-52%2066-30.6-10.2-52-31.5-52-66V38l52-20Z%22%20fill%3D%22url%28%23g%29%22%20filter%3D%22url%28%23s%29%22/%3E%0A%20%20%3Cpath%20d%3D%22M80%2031%20119%2046v31.2c0%2025.5-15.4%2042.4-39%2051.2-23.6-8.8-39-25.7-39-51.2V46l39-15Z%22%20fill%3D%22rgba%28255%2C255%2C255%2C.18%29%22%20stroke%3D%22rgba%28255%2C255%2C255%2C.72%29%22%20stroke-width%3D%222%22/%3E%0A%20%20%3Crect%20x%3D%2249%22%20y%3D%2272%22%20width%3D%2262%22%20height%3D%2243%22%20rx%3D%2214%22%20fill%3D%22url%28%23h%29%22/%3E%0A%20%20%3Cpath%20d%3D%22M63%2072V61c0-11.1%207.3-19%2017-19s17%207.9%2017%2019v11%22%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%229%22%20stroke-linecap%3D%22round%22/%3E%0A%20%20%3Ccircle%20cx%3D%2280%22%20cy%3D%2293%22%20r%3D%227%22%20fill%3D%22%234338CA%22/%3E%0A%20%20%3Cpath%20d%3D%22M80%2099v10%22%20stroke%3D%22%234338CA%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22/%3E%0A%20%20%3Ccircle%20cx%3D%22122%22%20cy%3D%2236%22%20r%3D%2210%22%20fill%3D%22%23FDE68A%22%20opacity%3D%22.95%22/%3E%0A%20%20%3Ccircle%20cx%3D%2238%22%20cy%3D%22124%22%20r%3D%2213%22%20fill%3D%22%23C7D2FE%22%20opacity%3D%22.9%22/%3E%0A%3C/svg%3E"/>
+<h3 class="footer-brand-title" style="font-family: var(--font-heading); color: white; margin-top:0;">iOS Vault Guide</h3>
+<p style="color: #a4b3ac;">Independent editorial coverage of mobile security and digital privacy strategies.</p>
+</div>
+<div>
+<h4 style="color: white; margin-bottom: 1rem;">Resources</h4>
+<ul style="list-style: none; padding: 0;">
+<li><a href="#">Method Guides</a></li>
+<li><a href="#">Security Audits</a></li>
+<li><a href="#">App Comparisons</a></li>
+<li><a href="#">Data Recovery</a></li>
+</ul>
+</div>
+<div>
+<h4 style="color: white; margin-bottom: 1rem;">Legal</h4>
+<ul style="list-style: none; padding: 0;">
+<li><a href="#">Privacy Policy</a></li>
+<li><a href="#">Terms of Use</a></li>
+<li><a href="#">Contact Us</a></li>
+</ul>
+</div>
+</div>
+<div class="footer-disclosure">
+                This site operates as an independent editorial resource. Some links may earn a referral commission at no cost to you. Product recommendations reflect editorial judgment and independent assessment. Folder Lock is developed by <a href="https://www.newsoftwares.net" rel="noopener noreferrer" target="_blank">NewSoftwares.net</a>.<br/><br/>
+                © 2026 iOS Vault Guide
+            </div>
+</div>
+</footer>
+<script defer="">
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.getElementById('site-header');
+            const onScroll = () => {
+                if (window.scrollY > 10) header.classList.add('scrolled');
+                else header.classList.remove('scrolled');
+            };
+            onScroll();
+            window.addEventListener('scroll', onScroll, { passive: true });
+
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            if (hamburger && navLinks) {
+                hamburger.addEventListener('click', () => navLinks.classList.toggle('show'));
+            }
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const targetId = this.getAttribute('href');
+                    if (!targetId || targetId === '#') return;
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        e.preventDefault();
+                        if (navLinks && navLinks.classList.contains('show')) navLinks.classList.remove('show');
+                        const headerOffset = 84;
+                        const elementPosition = targetElement.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                    }
+                });
+            });
+
+            const versionSelect = document.getElementById('ios-version');
+            const compatResult = document.getElementById('compat-result');
+            if (versionSelect && compatResult) {
+                versionSelect.addEventListener('change', (e) => {
+                    const val = e.target.value;
+                    compatResult.style.display = 'block';
+                    if (val === '18' || val === '17' || val === '16') {
+                        compatResult.style.backgroundColor = 'rgba(199,210,254,0.42)';
+                        compatResult.style.color = 'var(--color-primary-accent)';
+                        compatResult.innerHTML = '<strong>Supported:</strong> Your iOS version fully supports biometric Face ID/Touch ID locking for the native Hidden album. Ensure it is enabled in Settings &gt; Photos.';
+                    } else if (val === '15') {
+                        compatResult.style.backgroundColor = 'rgba(236,72,153,0.13)';
+                        compatResult.style.color = 'var(--color-secondary-accent)';
+                        compatResult.innerHTML = '<strong>Unsupported:</strong> iOS 15 and older can hide photos from the main timeline, but cannot lock the folder with a password or Face ID natively. A third-party app is highly recommended.';
+                    } else {
+                        compatResult.style.display = 'none';
+                    }
+                });
+            }
+
+            const faqLinks = document.querySelectorAll('.faq-link');
+            const faqSections = document.querySelectorAll('.faq-section');
+            faqLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    faqLinks.forEach(l => l.classList.remove('active'));
+                    faqSections.forEach(s => s.style.display = 'none');
+                    link.classList.add('active');
+                    const targetId = link.getAttribute('href').substring(1);
+                    const target = document.getElementById(targetId);
+                    if (target) target.style.display = 'block';
+                });
+            });
+            document.querySelectorAll('.faq-item').forEach((item, index) => {
+                if (index === 0) item.classList.add('expanded');
+                const question = item.querySelector('h4');
+                if (question) {
+                    question.setAttribute('tabindex', '0');
+                    question.addEventListener('click', () => item.classList.toggle('expanded'));
+                    question.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            item.classList.toggle('expanded');
+                        }
+                    });
+                }
+            });
+
+            const revealItems = document.querySelectorAll('.reveal-card');
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+                revealItems.forEach(item => observer.observe(item));
+            } else {
+                revealItems.forEach(item => item.classList.add('is-visible'));
+            }
+
+            const hero = document.querySelector('.hero-section');
+            const heroCard = document.querySelector('.hero-glass-card');
+            const canParallax = window.matchMedia('(min-width: 769px) and (prefers-reduced-motion: no-preference)').matches;
+            if (hero && heroCard && canParallax) {
+                hero.addEventListener('mousemove', (event) => {
+                    const rect = hero.getBoundingClientRect();
+                    const x = ((event.clientX - rect.left) / rect.width - 0.5) * 4;
+                    const y = ((event.clientY - rect.top) / rect.height - 0.5) * 4;
+                    heroCard.style.setProperty('--px', `${x}px`);
+                    heroCard.style.setProperty('--py', `${y}px`);
+                });
+                hero.addEventListener('mouseleave', () => {
+                    heroCard.style.setProperty('--px', '0px');
+                    heroCard.style.setProperty('--py', '0px');
+                });
+            }
+        });
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.pricing-panel').forEach(panel => panel.classList.remove('active'));
+            const activePanel = document.getElementById(tabId + '-panel');
+            if (activePanel) activePanel.classList.add('active');
+            const activeButton = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`'${tabId}'`));
+            if (activeButton) activeButton.classList.add('active');
+        }
+</script>
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [{
+        "@type": "Question",
+        "name": "Can you create locked photo albums on iPhone?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Beginning fully in iOS 16, Apple transformed the standard Hidden album into a biometric-locked space. You cannot create multiple distinct locked albums natively; all hidden media goes into a single repository requiring Face ID or Touch ID to view."
+        }
+      },{
+        "@type": "Question",
+        "name": "Can I create a folder for pictures and lock it on iPhone apart from the hidden folder?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Not natively within the Photos app. If you require multiple categorized secure folders, you must download a third-party security application that supports custom folder architecture."
+        }
+      },{
+        "@type": "Question",
+        "name": "What happens if I delete the locked folder on iPhone?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You cannot delete the native Hidden folder itself, but you can turn off its visibility in Settings. If you delete photos from within the hidden folder, they move to the Recently Deleted folder."
+        }
+      },{
+        "@type": "Question",
+        "name": "Can someone bypass app lock by restarting the phone?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Both native Apple security (Face ID) and properly engineered third-party applications remain fully engaged through a hard reset, requiring manual passcode entry to resume biometric or PIN access."
+        }
+      }]
+    }
+    </script>
+</body>
+</html>
