@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://how-to-create-a-locked-folder-in-iphone-photos-app-ios-17.vercel.app/sitemap.xml
